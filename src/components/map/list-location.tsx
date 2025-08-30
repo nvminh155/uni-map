@@ -20,7 +20,7 @@ const ListLocation = ({}: ListLocationProps) => {
   const map = useMap();
   const { locations } = useLocations();
 
-  console.log(locations);
+  // console.log(locations);
   const filteredLocations = useMemo(() => {
     return locations.filter(
       (loc) =>

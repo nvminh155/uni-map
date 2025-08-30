@@ -49,7 +49,10 @@ function LocationMarker() {
     window.addEventListener("deviceorientation", handleOrientation, true);
 
     map.on("click", (e) => {
-      console.log([e.latlng.lat, e.latlng.lng]);
+      const params = new URLSearchParams(window.location.search);
+      const track = params.get("track");
+
+      if (track === "minhnv") console.log([e.latlng.lat, e.latlng.lng]);
     });
     map
       .locate({
@@ -166,7 +169,7 @@ function LocationMarker() {
 }
 
 export default function MapComponent() {
-  console.log("re-render parent");
+  // console.log("re-render parent");
   return (
     <MapContainer
       center={[10.979163106745066, 106.67425870018994]}
@@ -205,6 +208,6 @@ export default function MapComponent() {
 
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
-  console.log("re-render marker target =>", target);
+  // console.log("re-render marker target =>", target);
   return target && <Marker position={target} icon={markerIcon}></Marker>;
 };
