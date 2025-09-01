@@ -1,7 +1,8 @@
 export interface Location {
-  id: number;
+  id?: number;
   name: string;
   lat: number;
   lng: number;
   description: string;
+  images: string[];
 }

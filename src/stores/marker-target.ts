@@ -1,9 +1,11 @@
 import { create } from "zustand";
 
 type Target = {
+  id?: number;
   latlng: L.LatLngExpression;
   name: string;
   description: string;
+  images: string[];
 }
 
 interface MarkerTargetState {
@@ -17,6 +19,7 @@ const useMarkerTarget = create<MarkerTargetState>((set) => ({
     latlng: [0, 0],
     name: "",
     description: "",
+    images: [],
   },
   setTarget: (target) => set({ target }),
 }));

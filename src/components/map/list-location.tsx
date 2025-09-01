@@ -55,9 +55,11 @@ const ListLocation = ({}: ListLocationProps) => {
                   size="sm"
                   onClick={() => {
                     setMarkerTarget({
+                      id: loc.id,
                       latlng: [loc.lat, loc.lng],
                       name: loc.name,
                       description: loc.description,
+                      images: loc.images,
                     });
                     map.flyTo([loc.lat, loc.lng], 18);
                   }}

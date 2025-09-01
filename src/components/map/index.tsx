@@ -1,12 +1,6 @@
 import "./style.css";
-import { useEffect, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMap,
-  Popup,
-} from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 
 import MapIcon, { createArrowIcon, markerIcon } from "./map-icon";
@@ -23,6 +17,9 @@ import ListLocation from "./list-location";
 import useMarkerTarget from "@/stores/marker-target";
 import { getBoundsFromLocations } from "@/utils";
 import { useLocations } from "@/hooks/useLocations";
+import { sb } from "@/lib/supabase";
+import { ImageIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 function distanceInMeters(latlng1: any, latlng2: any) {
   return latlng1.distanceTo(latlng2); // Leaflet built-in
@@ -167,9 +164,7 @@ function SetBounds({
 export default function MapComponent() {
   const { locations } = useLocations();
 
-  if (locations.length === 0) return <div>
-    Loading map...
-  </div>;
+  if (locations.length === 0) return <div>Loading map...</div>;
   const bounds: L.LatLngBoundsExpression = getBoundsFromLocations(locations);
   const maxBounds = L.latLngBounds(bounds as any).pad(0.4);
   return (
@@ -177,15 +172,20 @@ export default function MapComponent() {
       center={[10.979163106745066, 106.67425870018994]}
       zoom={16}
       minZoom={14}
-      maxZoom={18}
+      maxZoom={19}
       bounds={bounds}
       maxBounds={maxBounds}
-      style={{ height: "100vh", width: "100vw"}}
+      style={{ height: "100vh", width: "100vw" }}
       // maxBoundsViscosity={1.0} // càng cao càng "dính" vào biên
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        detectRetina={true}
+        maxNativeZoom={18}
+        minNativeZoom={14}
+        maxZoom={19}
+        noWrap={false}
       />
       {/* <Polygon
         pathOptions={{
@@ -215,7 +215,6 @@ export default function MapComponent() {
         </SheetContent>
       </Sheet>
 
-    
       <MarkerTarget />
     </MapContainer>
   );
@@ -223,12 +222,82 @@ export default function MapComponent() {
 
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
-  // console.log("re-render marker target =>", target);
-  return target && <Marker position={target.latlng} icon={markerIcon}>
-    <Popup>
-      <h3 className="text-lg font-semibold">{target.name}</h3>
-      <p>{target.description}</p>
-      
-    </Popup>
-  </Marker>;
+
+  return (
+    target && (
+      <Marker position={target.latlng} icon={markerIcon}>
+        <Popup>
+          <h3 className=" font-semibold">{target.name}</h3>
+          <p className="text-xs text-muted-foreground">{target.description}</p>
+          {target?.images?.length > 0 && <ImagesTarget />}
+        </Popup>
+      </Marker>
+    )
+  );
 };
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ImgPannellum from "./img-pannellum";
+
+function ImagesTarget() {
+  const target = useMarkerTarget((s) => s.target);
+
+  if (!target?.id) return null;
+  const baseUrl =
+    import.meta.env.VITE_SUPABASE_URL +
+    "/storage/v1/object/public/locations/L" +
+    target.id;
+
+  // console.log("baseUrl", baseUrl, target.images);
+  return (
+    <Dialog>
+      <DialogTrigger
+        asChild
+        onClick={() => {
+          console.log("click");
+        }}
+      >
+        <Button variant="outline">
+          <ImageIcon className="size-4" />
+          <span className="text-xs">Xem hình ảnh</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="z-[1000] !w-[90%] !max-w-[90%] !max-h-[90%] flex flex-col px-0 pb-0 overflow-hidden">
+        <DialogHeader>
+          <DialogTitle className="text-sm">
+            Hình ảnh của {target.name}
+          </DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+
+        <div className="flex-1">
+          <ImgPannellum imageSource={baseUrl + "/" + target.images[0]} />
+        </div>
+        {/* <div className="flex items-center overflow-x-auto">
+          {target.images.map((image, i) => (
+            // <img
+            //   key={"image " + i}
+            //   src={baseUrl + "/" + image}
+            //   alt={"photo of " + target.name}
+            //   className="w-[200px] h-[200px] o"
+            // />
+            <BlurImage
+              key={"image " + i}
+              src={baseUrl + "/" + image}
+              alt={"photo of " + target.name}
+              ratio={1}
+              className="w-[200px] h-[200px] object-cover"
+            />
+          ))}
+        </div> */}
+      </DialogContent>
+    </Dialog>
+  );
+}
