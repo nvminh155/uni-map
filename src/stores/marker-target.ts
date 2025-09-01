@@ -1,13 +1,23 @@
 import { create } from "zustand";
 
+type Target = {
+  latlng: L.LatLngExpression;
+  name: string;
+  description: string;
+}
+
 interface MarkerTargetState {
-  target: L.LatLngExpression | null;
-  setTarget: (target: L.LatLngExpression) => void;
+  target: Target | null;
+  setTarget: (target: Target) => void;
 }
 
 // ✅ typed store
 const useMarkerTarget = create<MarkerTargetState>((set) => ({
-  target: null,
+  target: {
+    latlng: [0, 0],
+    name: "",
+    description: "",
+  },
   setTarget: (target) => set({ target }),
 }));
 

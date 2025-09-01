@@ -1,4 +1,3 @@
-"use client";
 import { memo, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -55,9 +54,14 @@ const ListLocation = ({}: ListLocationProps) => {
                 <Button
                   size="sm"
                   onClick={() => {
-                    setMarkerTarget([loc.lat, loc.lng]);
+                    setMarkerTarget({
+                      latlng: [loc.lat, loc.lng],
+                      name: loc.name,
+                      description: loc.description,
+                    });
                     map.flyTo([loc.lat, loc.lng], 18);
                   }}
+                  className="hover:cursor-pointer"
                 >
                   Xem trên bản đồ
                 </Button>

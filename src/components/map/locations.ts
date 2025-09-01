@@ -152,6 +152,13 @@ const locations = [
     description: "Cổng 5",
   },
   {
+    name: "Cổng 6",
+    lat: 10.98122810820551, 
+    lng: 106.67420983314514,
+    description: "Cổng 6",
+  },
+  
+  {
     name: "Cổng 4",
     lat: 10.979169953659959,
     lng: 106.67555598626686,
