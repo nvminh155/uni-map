@@ -247,7 +247,7 @@ import ImgPannellum from "./img-pannellum";
 function ImagesTarget() {
   const target = useMarkerTarget((s) => s.target);
 
-  if (!target?.id) return null;
+  if (!target?.id || !target.images || target.images.length === 0) return null;
   const baseUrl =
     import.meta.env.VITE_SUPABASE_URL +
     "/storage/v1/object/public/locations/L" +
