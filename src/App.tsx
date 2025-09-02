@@ -3,6 +3,7 @@ import { getDeviceType } from "./utils";
 
 const App = () => {
   const deviceType = getDeviceType();
+
   return (
     <div className="z-[1000] ">
       <MapComponent />

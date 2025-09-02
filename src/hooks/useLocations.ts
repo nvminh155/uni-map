@@ -1,29 +1,30 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { sb } from "@/lib/supabase";
 import type { Location } from "@/types/location";
+import { csl } from "@/lib/csl";
 
 export function useLocations() {
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchLocations = async () => {
+  const { data: locations = [], isLoading: loading, error } = useQuery({
+    queryKey: ["locations"],
+    queryFn: async (): Promise<Location[]> => {
       const { data, error } = await sb
         .from("locations")
         .select("*")
         .order("id");
 
       if (error) {
-        setError(error.message);
-      } else {
-        setLocations(data as Location[]);
+        csl.error(error);
+        throw new Error(error.message);
       }
-      setLoading(false);
-    };
 
-    fetchLocations();
-  }, []);
+      return data as Location[];
+    },
+    staleTime: 1000 * 60 * 60 * 15,
+  });
 
-  return { locations, loading, error };
+  return { 
+    locations, 
+    loading, 
+    error: error ? error.message : null 
+  };
 }

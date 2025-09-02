@@ -104,23 +104,6 @@ function LocationMarker() {
     };
   }, [map]);
 
-  useEffect(() => {
-    map.on("moveend", () => {
-      const bounds = map.getBounds(); // lấy LatLngBounds
-      console.log("BBox:", bounds);
-
-      // Nếu muốn trả về bbox dạng [west, south, east, north]:
-      const bbox = [
-        bounds.getWest(),
-        bounds.getSouth(),
-        bounds.getEast(),
-        bounds.getNorth(),
-      ];
-
-      console.log("BBox array:", bbox);
-    });
-  }, [map]);
-
   return null;
   // return position === null ? null : (
   //   <Marker
