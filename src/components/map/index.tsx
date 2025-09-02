@@ -17,8 +17,7 @@ import ListLocation from "./list-location";
 import useMarkerTarget from "@/stores/marker-target";
 import { getBoundsFromLocations } from "@/utils";
 import { useLocations } from "@/hooks/useLocations";
-import { sb } from "@/lib/supabase";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "../ui/button";
 
 function distanceInMeters(latlng1: any, latlng2: any) {
@@ -197,24 +196,40 @@ export default function MapComponent() {
       /> */}
       <LocationMarker />
       <SetBounds bounds={bounds} maxBounds={maxBounds} />
-      <Sheet>
-        <SheetOverlay className="z-[1000]" />
-        <SheetTrigger className="absolute right-4 top-4 z-[1000] bg-white p-2 rounded-lg hover:cursor-pointer shadow-lg">
-          <MapIcon className="size-6" />
-        </SheetTrigger>
-        <SheetContent
-          className="z-[1000] w-[300px] sm:w-[540px] px-2"
-          onOpenAutoFocus={(e) => e.preventDefault()}
+
+      <div className="absolute right-4 top-4 z-[1000] flex gap-2 items-center">
+        <Sheet>
+          <SheetOverlay className="z-[1000]" />
+          <SheetTrigger className="z-[1000] bg-white p-2 rounded-lg hover:cursor-pointer shadow-lg">
+            <MapIcon className="size-6" />
+          </SheetTrigger>
+          <SheetContent
+            className="z-[1000] w-[300px] sm:w-[540px] px-2"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
+            <SheetHeader>
+              <SheetTitle>Danh sách địa điểm</SheetTitle>
+              <SheetDescription></SheetDescription>
+            </SheetHeader>
+
+            <ListLocation />
+          </SheetContent>
+        </Sheet>
+
+        <Button
+          className="rounded-2xl flex flex-col gap-0.5 bg-white text-black shadow-lg hover:bg-gray-100"
+          onClick={() => {
+            window.open("https://forms.gle/p3EsHPoXk6qC9x1N6", "_blank");
+          }}
         >
-          <SheetHeader>
-            <SheetTitle>Danh sách địa điểm</SheetTitle>
-            <SheetDescription></SheetDescription>
-          </SheetHeader>
+          <div className="flex items-center gap-1">
+            <ThumbsUp className="size-3 text-green-500" />
+            <ThumbsDown className="size-3 text-red-500" />
+          </div>
 
-          <ListLocation />
-        </SheetContent>
-      </Sheet>
-
+          <span className="text-xs font-semibold text-blue-500">Đánh giá</span>
+        </Button>
+      </div>
       <MarkerTarget />
     </MapContainer>
   );
@@ -264,7 +279,7 @@ function ImagesTarget() {
           console.log("click");
         }}
       >
-        <Button variant="outline">
+        <Button>
           <ImageIcon className="size-4" />
           <span className="text-xs">Xem hình ảnh</span>
         </Button>
