@@ -11,7 +11,7 @@ export const markerIcon = L.icon({
 export function createArrowIcon(rotation: number) {
   const svgArrow = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
-         viewBox="0 0 24 24" transform="rotate(${360  - rotation})">
+         viewBox="0 0 24 24" transform="rotate(${rotation})">
       <defs>
         <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
           <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1F53AD" flood-opacity="0.8"/>
