@@ -54,6 +54,7 @@ const ListLocation = ({}: ListLocationProps) => {
                 <Button
                   size="sm"
                   onClick={() => {
+                    console.log("loc", loc);
                     setMarkerTarget({
                       id: loc.id,
                       latlng: [loc.lat, loc.lng],

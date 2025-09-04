@@ -19,7 +19,7 @@ export function useLocations() {
 
       return data as Location[];
     },
-    staleTime: 1000 * 60 * 60 * 15,
+    staleTime: 1000 * 60 * 60 * 2,
   });
 
   return { 

@@ -146,7 +146,13 @@ function SetBounds({
 export default function MapComponent() {
   const { locations } = useLocations();
 
-  if (locations.length === 0) return <div>Loading map...</div>;
+  if (locations.length === 0)
+    return (
+      <div className="h-[100vh] w-[100vw] flex items-center justify-center text-lg font-semibold">
+        Loading map...
+      </div>
+    );
+
   const bounds: L.LatLngBoundsExpression = getBoundsFromLocations(locations);
   const maxBounds = L.latLngBounds(bounds as any).pad(0.4);
   return (
@@ -220,11 +226,19 @@ export default function MapComponent() {
 
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
+  const markerRef = useRef<any>(null);
+  console.log("target", target);
+
+  useEffect(() => {
+    if (markerRef.current && target?.images?.length ) {
+      markerRef.current.openPopup();
+    }
+  }, [target]);
 
   return (
     target && (
-      <Marker position={target.latlng} icon={markerIcon}>
-        <Popup>
+      <Marker position={target.latlng} icon={markerIcon} ref={markerRef}>
+        <Popup autoPan>
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
           {target?.images?.length > 0 && <ImagesTarget />}
@@ -250,7 +264,7 @@ function ImagesTarget() {
   if (!target?.id || !target.images || target.images.length === 0) return null;
   const baseUrl =
     import.meta.env.VITE_SUPABASE_URL +
-    "/storage/v1/object/public/locations/L" +
+    "/storage/v1/object/public/panoramas/locations/L" +
     target.id;
 
   // console.log("baseUrl", baseUrl, target.images);
