@@ -58,12 +58,33 @@ function LocationMarker() {
 
       if (track === "minhnv") console.log([e.latlng.lat, e.latlng.lng]);
     });
+    const timeinterval = setInterval(() => {
+      // if(navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition((position) => {
+      //     const latlng = position.coords as any;
+      //     const newPos = L.latLng(latlng.latitude, latlng.longitude);
+      //     if (!markerRef.current) {
+      //       markerRef.current = L.marker(newPos, {
+      //         icon: createArrowIcon(0),
+      //       }).addTo(map);
+      //     } else {
+      //       markerRef.current.setLatLng(newPos);
+      //     }
+      //     markerRef.current?.setLatLng(newPos);
+      //     map.flyTo(newPos, map.getZoom(), {
+      //       animate: true,
+      //       duration: 1,
+      //     });
+      //   });
+      // } else {
+      //   alert("Geolocation is not supported by this browser.");
+      // }
+    }, 1000);
     map
       .locate({
-        watch: true,
-        timeout: 10000,
-        maximumAge: 5000,
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 5000,
       })
       .on("locationfound", (e) => {
         const latlng = e.latlng;
@@ -100,9 +121,24 @@ function LocationMarker() {
       });
 
     return () => {
-      map.locate().stop();
+      // map.locate().stop();
+      clearInterval(timeinterval);
     };
   }, [map]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      const openzoom = params.get("openzoom");
+      if (openzoom === "1") {
+        map.setMinZoom(3);
+        map.setMaxBounds();
+      }
+    }, 5000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [markerRef.current]);
 
   return null;
   // return position === null ? null : (
@@ -137,8 +173,13 @@ function SetBounds({
   useEffect(() => {
     const zoom = map.getBoundsZoom(bounds);
     map.fitBounds(bounds);
-    map.setMinZoom(zoom);
-    map.setMaxBounds(maxBounds);
+
+    const params = new URLSearchParams(window.location.search);
+    const openzoom = params.get("openzoom");
+    if (openzoom !== "1") {
+      map.setMinZoom(zoom);
+      map.setMaxBounds(maxBounds);
+    }
   }, [map, bounds, maxBounds]);
   return null;
 }
@@ -159,10 +200,10 @@ export default function MapComponent() {
     <MapContainer
       center={[10.979163106745066, 106.67425870018994]}
       zoom={16}
-      minZoom={14}
+      minZoom={3}
       maxZoom={19}
       bounds={bounds}
-      maxBounds={maxBounds}
+      // maxBounds={maxBounds}
       style={{ height: "100vh", width: "100vw" }}
       // maxBoundsViscosity={1.0} // càng cao càng "dính" vào biên
     >
@@ -230,7 +271,7 @@ const MarkerTarget = () => {
   csl.log("target", target);
 
   useEffect(() => {
-    if (markerRef.current && target?.images?.length ) {
+    if (markerRef.current && target?.images?.length) {
       markerRef.current.openPopup();
     }
   }, [target]);
@@ -271,11 +312,7 @@ function ImagesTarget() {
   // console.log("baseUrl", baseUrl, target.images);
   return (
     <Dialog>
-      <DialogTrigger
-        asChild
-        onClick={() => {
-        }}
-      >
+      <DialogTrigger asChild onClick={() => {}}>
         <Button>
           <ImageIcon className="size-4" />
           <span className="text-xs">Xem hình ảnh</span>
