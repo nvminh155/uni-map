@@ -227,7 +227,7 @@ export default function MapComponent() {
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
   const markerRef = useRef<any>(null);
-  console.log("target", target);
+  csl.log("target", target);
 
   useEffect(() => {
     if (markerRef.current && target?.images?.length ) {
@@ -257,6 +257,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ImgPannellum from "./img-pannellum";
+import { csl } from "@/lib/csl";
 
 function ImagesTarget() {
   const target = useMarkerTarget((s) => s.target);
@@ -273,7 +274,6 @@ function ImagesTarget() {
       <DialogTrigger
         asChild
         onClick={() => {
-          console.log("click");
         }}
       >
         <Button>
