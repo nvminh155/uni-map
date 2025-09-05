@@ -1,3 +1,4 @@
+import LocationFade from "./components/LoadingScreen";
 import MapComponent from "./components/map";
 import { getDeviceType } from "./utils";
 
@@ -6,6 +7,7 @@ const App = () => {
 
   return (
     <div className="z-[1000] ">
+      <LocationFade />
       <MapComponent />
       {deviceType === "pc" && (
         <div className="fixed top-4 left-1/2 text-lg select-none -translate-x-1/2 bg-white p-1 rounded-lg shadow-lg z-[1000]">

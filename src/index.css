@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@200..700&display=swap');
+
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "leaflet/dist/leaflet.css";
@@ -138,11 +142,47 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+
 @layer base {
+  /* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap'); */
+
+  .font-journey {
+    font-family: 'Dancing Script', sans-serif;
+
+    font-optical-sizing: auto;
+    font-stretch: normal;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+  .font-yanone {
+    font-family: "Yanone Kaffeesatz", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+  /** Text Gradient Example */ 
+  .text-gradient {
+    color: #1F53AD; 
+    background-image: linear-gradient(45deg, #1F53AD , #84B1F5 50%, #1F53AD 100%); 
+    background-clip: text; 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+   }
+
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .fade {
+    animation: fadeinout 800ms ease-out infinite;
+  }
+  
+  @keyframes fadeinout {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
   }
 }
