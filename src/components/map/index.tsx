@@ -282,7 +282,7 @@ const MarkerTarget = () => {
         <Popup autoPan>
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
-          {target?.images?.length > 0 && <ImagesTarget />}
+          {/* {target?.images?.length > 0 && <ImagesTarget />} */}
         </Popup>
       </Marker>
     )
