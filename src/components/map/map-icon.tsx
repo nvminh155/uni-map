@@ -8,6 +8,14 @@ export const markerIcon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png",
 });
 
+
+export const createSchoolGateMarker = (gate: string)=> L.icon({
+  iconSize: [40, 40],
+  iconAnchor: [15, 15],
+  popupAnchor: [2, -40],
+  iconUrl: `/schoolgate/${gate}.svg`,
+});
+
 export function createArrowIcon(rotation: number) {
   const svgArrow = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"

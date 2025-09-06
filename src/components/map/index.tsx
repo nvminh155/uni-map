@@ -1,9 +1,9 @@
 import "./style.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 
-import MapIcon, { createArrowIcon, markerIcon } from "./map-icon";
+import MapIcon, { createArrowIcon, createSchoolGateMarker, markerIcon } from "./map-icon";
 import {
   Sheet,
   SheetContent,
@@ -185,6 +185,26 @@ function SetBounds({
   return null;
 }
 
+function ListSchoolGate() {
+  const { locations } = useLocations();
+  const map = useMap();
+
+  const filteredLocations = useMemo(() => {
+    return locations.filter((loc) => loc.name.startsWith("Cổng"));
+  }, [locations]);
+
+  useEffect(() => {
+    if (filteredLocations.length > 0) {
+      filteredLocations.forEach((loc) => {
+        L.marker([loc.lat, loc.lng], {
+          icon: createSchoolGateMarker(loc.name),
+        }).addTo(map);
+      });
+    }
+  }, [filteredLocations]);
+
+  return null;
+}
 export default function MapComponent() {
   const { locations } = useLocations();
 
@@ -196,7 +216,7 @@ export default function MapComponent() {
     );
 
   const bounds: L.LatLngBoundsExpression = getBoundsFromLocations(locations);
-  const maxBounds = L.latLngBounds(bounds as any).pad(0.4);
+  const maxBounds = L.latLngBounds(bounds as any).pad(0.6);
   return (
     <MapContainer
       center={[10.979163106745066, 106.67425870018994]}
@@ -262,6 +282,7 @@ export default function MapComponent() {
         </Button>
       </div>
       <MarkerTarget />
+      <ListSchoolGate />
     </MapContainer>
   );
 }
@@ -272,15 +293,15 @@ const MarkerTarget = () => {
   csl.log("target", target);
 
   useEffect(() => {
-    if (markerRef.current && target?.images?.length) {
+    if (markerRef.current) {
       markerRef.current.openPopup();
     }
   }, [target]);
 
   return (
     target && (
-      <Marker position={target.latlng} icon={markerIcon} ref={markerRef}>
-        <Popup autoPan>
+      <Marker position={target.latlng} icon={markerIcon} ref={markerRef} >
+        <Popup  >
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
           {/* {target?.images?.length > 0 && <ImagesTarget />} */}
@@ -289,4 +310,3 @@ const MarkerTarget = () => {
     )
   );
 };
-
