@@ -20,6 +20,7 @@ import { useLocations } from "@/hooks/useLocations";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { csl } from "@/lib/csl";
+import ImagesTarget from "./ImagesTarget";
 
 function distanceInMeters(latlng1: any, latlng2: any) {
   return latlng1.distanceTo(latlng2); // Leaflet built-in
@@ -288,6 +289,9 @@ export default function MapComponent() {
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
   const markerRef = useRef<any>(null);
+  const params = new URLSearchParams(window.location.search);
+  const openimages = params.get("openimages") ?? "";
+
   csl.log("target", target);
 
   useEffect(() => {
@@ -302,7 +306,7 @@ const MarkerTarget = () => {
         <Popup  >
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
-          {/* {target?.images?.length > 0 && <ImagesTarget />} */}
+          {target?.images?.length > 0 && openimages == "1" && <ImagesTarget />}
         </Popup>
       </Marker>
     )
