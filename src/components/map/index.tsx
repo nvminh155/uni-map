@@ -3,7 +3,11 @@ import { useEffect, useMemo, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import L from "leaflet";
 
-import MapIcon, { createArrowIcon, createSchoolGateMarker, markerIcon } from "./map-icon";
+import MapIcon, {
+  createArrowIcon,
+  createSchoolGateMarker,
+  markerIcon,
+} from "./map-icon";
 import {
   Sheet,
   SheetContent,
@@ -132,6 +136,7 @@ function LocationMarker() {
     const timeout = setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
       const openzoom = params.get("openzoom");
+      map.invalidateSize();
       if (openzoom === "1") {
         map.setMinZoom(3);
         map.setMaxBounds();
@@ -182,6 +187,10 @@ function SetBounds({
       map.setMinZoom(zoom);
       map.setMaxBounds(maxBounds);
     }
+
+    map.on("zoom", () => {
+      console.log("zoom", map.getZoom());
+    });
   }, [map, bounds, maxBounds]);
   return null;
 }
@@ -209,6 +218,10 @@ function ListSchoolGate() {
 export default function MapComponent() {
   const { locations } = useLocations();
 
+  useEffect(() => {
+    window.dispatchEvent(new Event("resize"));
+  }, []);
+
   if (locations.length === 0)
     return (
       <div className="h-[100vh] w-[100vw] flex items-center justify-center text-lg font-semibold">
@@ -218,23 +231,24 @@ export default function MapComponent() {
 
   const bounds: L.LatLngBoundsExpression = getBoundsFromLocations(locations);
   const maxBounds = L.latLngBounds(bounds as any).pad(0.6);
+
   return (
     <MapContainer
       center={[10.979163106745066, 106.67425870018994]}
       zoom={16}
       minZoom={3}
       bounds={bounds}
-      maxZoom={20}
       // maxBounds={maxBounds}
       style={{ height: "100vh", width: "100vw" }}
+
       // maxBoundsViscosity={1.0} // càng cao càng "dính" vào biên
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         detectRetina={true}
-        noWrap={false}
-        maxZoom={20}
+        maxZoom={22}
+        maxNativeZoom={18}
       />
       {/* <Polygon
         pathOptions={{
@@ -302,8 +316,8 @@ const MarkerTarget = () => {
 
   return (
     target && (
-      <Marker position={target.latlng} icon={markerIcon} ref={markerRef} >
-        <Popup  >
+      <Marker position={target.latlng} icon={markerIcon} ref={markerRef}>
+        <Popup>
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
           {target?.images?.length > 0 && openimages == "1" && <ImagesTarget />}

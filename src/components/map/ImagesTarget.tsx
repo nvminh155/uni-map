@@ -34,10 +34,24 @@ function ImagesTarget() {
           <DialogTitle className="text-sm">
             Hình ảnh của {target.name}
           </DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription className="text-xs">
+            {target.description}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex-1">
+          <div className="text-xs text-gray-500">
+            Đây là bản beta để xem hình ảnh liên quan đến {target.name} nên còn
+            có thể còn sai sót hoặc ảnh mờ. Vui lòng góp ý{" "}
+            <a
+              href="https://forms.gle/p3EsHPoXk6qC9x1N6"
+              target="_blank"
+              className="text-blue-500 underline"
+            >
+              tại đây
+            </a>{" "}
+            nếu như bạn có thêm hình ảnh liên quan hoặc yêu cầu đổi hình ảnh.
+          </div>
           <ImgPannellum imageSource={baseUrl + "/" + target.images[0]} />
         </div>
         {/* <div className="flex items-center overflow-x-auto">
