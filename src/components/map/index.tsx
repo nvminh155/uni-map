@@ -222,8 +222,8 @@ export default function MapComponent() {
       center={[10.979163106745066, 106.67425870018994]}
       zoom={16}
       minZoom={3}
-      maxZoom={19}
       bounds={bounds}
+      maxZoom={20}
       // maxBounds={maxBounds}
       style={{ height: "100vh", width: "100vw" }}
       // maxBoundsViscosity={1.0} // càng cao càng "dính" vào biên
@@ -232,10 +232,8 @@ export default function MapComponent() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         detectRetina={true}
-        maxNativeZoom={18}
-        minNativeZoom={14}
-        maxZoom={19}
         noWrap={false}
+        maxZoom={20}
       />
       {/* <Polygon
         pathOptions={{
