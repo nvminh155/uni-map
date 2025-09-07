@@ -26,6 +26,8 @@ import { Button } from "../ui/button";
 import { csl } from "@/lib/csl";
 import ImagesTarget from "./ImagesTarget";
 
+import "leaflet-rotate";
+
 function distanceInMeters(latlng1: any, latlng2: any) {
   return latlng1.distanceTo(latlng2); // Leaflet built-in
 }
@@ -222,6 +224,10 @@ export default function MapComponent() {
     window.dispatchEvent(new Event("resize"));
   }, []);
 
+  useEffect(() => {
+
+  }, []);
+
   if (locations.length === 0)
     return (
       <div className="h-[100vh] w-[100vw] flex items-center justify-center text-lg font-semibold">
@@ -232,6 +238,7 @@ export default function MapComponent() {
   const bounds: L.LatLngBoundsExpression = getBoundsFromLocations(locations);
   const maxBounds = L.latLngBounds(bounds as any).pad(0.6);
 
+
   return (
     <MapContainer
       center={[10.979163106745066, 106.67425870018994]}
@@ -240,6 +247,10 @@ export default function MapComponent() {
       bounds={bounds}
       // maxBounds={maxBounds}
       style={{ height: "100vh", width: "100vw" }}
+    
+      rotate={true}
+      bearing={0}
+      touchRotate={true}         // cho phép xoay bằng 2 ngón
 
       // maxBoundsViscosity={1.0} // càng cao càng "dính" vào biên
     >
@@ -249,6 +260,7 @@ export default function MapComponent() {
         detectRetina={true}
         maxZoom={22}
         maxNativeZoom={18}
+        
       />
       {/* <Polygon
         pathOptions={{
@@ -303,8 +315,6 @@ export default function MapComponent() {
 const MarkerTarget = () => {
   const target = useMarkerTarget((s) => s.target);
   const markerRef = useRef<any>(null);
-  const params = new URLSearchParams(window.location.search);
-  const openimages = params.get("openimages") ?? "";
 
   csl.log("target", target);
 
