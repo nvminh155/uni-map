@@ -10,7 +10,7 @@ export const markerIcon = L.icon({
 
 
 export const createSchoolGateMarker = (gate: string)=> L.icon({
-  iconSize: [40, 40],
+  iconSize: [30, 30],
   iconAnchor: [15, 15],
   popupAnchor: [2, -40],
   iconUrl: `/schoolgate/${gate}.svg`,

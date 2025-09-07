@@ -189,7 +189,7 @@ function SetBounds({
     }
 
     map.on("zoom", () => {
-      console.log("zoom", map.getZoom());
+      csl.log("zoom", map.getZoom());
     });
   }, [map, bounds, maxBounds]);
   return null;
@@ -320,7 +320,7 @@ const MarkerTarget = () => {
         <Popup>
           <h3 className=" font-semibold">{target.name}</h3>
           <p className="text-xs text-muted-foreground">{target.description}</p>
-          {target?.images?.length > 0 && openimages == "1" && <ImagesTarget />}
+          {target?.images?.length > 0 && <ImagesTarget />}
         </Popup>
       </Marker>
     )
